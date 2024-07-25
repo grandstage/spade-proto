@@ -1,0 +1,43 @@
+@import '~include-media/dist/_include-media.scss';
+
+
+// Screen size
+$breakpoints: (
+    phone: 480px,
+    tablet: 768px,
+    desktop: 1024px
+);
+
+// Colors
+
+$grand-blue: #09268B; // old
+$stage-gold: #FFC757;
+$stage-white: #FEFEFF;
+$stage-white-new: #FFFFFF;
+
+$black: #000;
+$stage-black: #3a3b41;
+$gold-600: #DE9910;
+$gold-500: #F9B42A;
+$grey-100: #F9FAFB;
+$grey-300: #D2D2D9;
+$grey-700: #3A3B41; // new primary color
+$grey-50: #F9FAFB;
+$grey-500: #7D7E86;
+$blue-100: #E6EBFE;
+$blue-400: #4A6ADC;
+$blue-500: #2741C6;
+$light-blue: #E6EBFE;
+$red: #EB5757;
+$red-outdated: #DC4A4A;
+$light-blue: #9CE0F5;
+
+// Fonts
+$font-1: 12px;
+$font-2: 16px;
+$font-3: 20px;
+$font-4: 24px;
+$font-5: 32px;
+$font-6: 48px;
+
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap')
