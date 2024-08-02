@@ -4,6 +4,8 @@ import { Inter } from "next/font/google";
 import { getServerSession } from "next-auth";
 import Link from "next/link";
 import Logout from "./logout";
+import Header from './components/header/header';
+import Menu from './components/menu/menu';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,12 +22,20 @@ export default async function RootLayout({
   const session = await getServerSession();
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <nav>
-          {!!session && <Logout />}
-        </nav>
-        {children}
-      </body>
-    </html>
+    <body className={inter.className}>
+      {session ? (
+        <>
+          <Header />
+          <div style={{ display: 'flex' }}>
+            <Menu />
+            <main style={{ flex: 1 }}>{children}</main>
+            <Logout />
+          </div>
+        </>
+      ) : (
+        children
+      )}
+    </body>
+  </html>
   );
 }

@@ -38,7 +38,7 @@ html, body, #__next {
   height: 100%;
   margin: 0;
   padding: 0;
-  background-color: #f7fafc; 
+  overflow: hidden;
 }
 
 @keyframes ripple {
@@ -47,9 +47,3 @@ html, body, #__next {
     opacity: 0;
   }
 }
-
-.bg-custom {
-  background-color: $grey-700;
-  height: 100vh;
-}
-
