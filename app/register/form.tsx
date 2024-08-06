@@ -42,13 +42,16 @@ const StyledButton = styled(Button)(({ theme }) => ({
 
 export default function RegisterForm() {
   const [showPassword, setShowPassword] = useState(false);
-  const [formData, setFormData] = useState({ email: "", password: "" });
+  const [formData, setFormData] = useState({ username: "", password: "" });
   const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const response = await fetch(`/api/auth/register`, {
+    const response = await fetch(`http://localhost:8000/api/register/`, {
       method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify(formData),
     });
     console.log({ response });
@@ -89,13 +92,13 @@ export default function RegisterForm() {
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
-                name="email"
+                name="username"
                 label="Email address"
-                type="email"
+                type="username"
                 variant="outlined"
                 fullWidth
                 required
-                value={formData.email}
+                value={formData.username}
                 onChange={handleChange}
               />
             </Grid>
