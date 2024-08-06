@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, FormEvent } from "react";
-import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
@@ -45,24 +44,38 @@ const StyledButton = styled(Button)({
 export default function LoginForm() {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
-  const [formData, setFormData] = useState({ email: "", password: "" });
+  const [formData, setFormData] = useState({ username: "", password: "" });
   const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const response = await signIn("credentials", {
-      email: formData.email,
-      password: formData.password,
-      redirect: false,
-    });
-
-    console.log({ response });
-    if (!response?.error) {
-      setError(null);
-      router.push("/dashboard");
-      router.refresh();
-    } else {
-      setError("Invalid email or password");
+  
+    try {
+      // Retrieve the CSRF token (You may need to adjust this based on how you store or fetch the token)
+      const csrfTokenMeta = document.querySelector('meta[name="csrf-token"]');
+      const csrfToken = csrfTokenMeta ? csrfTokenMeta.getAttribute('content') || '' : '';
+      const headers: HeadersInit = {
+        'Content-Type': 'application/json',
+        ...(csrfToken && { 'X-CSRFToken': csrfToken }), // Conditionally include CSRF token
+      };
+  
+      const response = await fetch(`http://localhost:8000/api/login/`, {
+        method: "POST",
+        headers: headers,
+        body: JSON.stringify(formData),
+      });
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Login successful:', data);
+        console.log('Response Status: ', response.status)
+        router.push("/dashboard");
+      } else {
+        const errorData = await response.json();
+        setError(errorData.message || "Invalid username or password");
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      setError("An unexpected error occurred");
     }
   };
 
@@ -93,13 +106,13 @@ export default function LoginForm() {
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
-                name="email"
+                name="username"
                 label="Email address"
-                type="email"
+                type="username"
                 variant="outlined"
                 fullWidth
                 required
-                value={formData.email}
+                value={formData.username}
                 onChange={handleChange}
               />
             </Grid>
