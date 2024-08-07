@@ -1,8 +1,10 @@
+// pages/login.tsx
 "use client";
 
 import React, { useState, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { signIn } from "next-auth/react";
 import {
   Alert,
   Container,
@@ -49,33 +51,17 @@ export default function LoginForm() {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-  
-    try {
-      // Retrieve the CSRF token (You may need to adjust this based on how you store or fetch the token)
-      const csrfTokenMeta = document.querySelector('meta[name="csrf-token"]');
-      const csrfToken = csrfTokenMeta ? csrfTokenMeta.getAttribute('content') || '' : '';
-      const headers: HeadersInit = {
-        'Content-Type': 'application/json',
-        ...(csrfToken && { 'X-CSRFToken': csrfToken }), // Conditionally include CSRF token
-      };
-  
-      const response = await fetch(`http://localhost:8000/api/login/`, {
-        method: "POST",
-        headers: headers,
-        body: JSON.stringify(formData),
-      });
-      if (response.ok) {
-        const data = await response.json();
-        console.log('Login successful:', data);
-        console.log('Response Status: ', response.status)
-        router.push("/dashboard");
-      } else {
-        const errorData = await response.json();
-        setError(errorData.message || "Invalid username or password");
-      }
-    } catch (error) {
-      console.error('Error:', error);
-      setError("An unexpected error occurred");
+
+    const result = await signIn("credentials", {
+      redirect: false,
+      username: formData.username,
+      password: formData.password,
+    });
+
+    if (result?.error) {
+      setError(result.error);
+    } else {
+      router.push("/dashboard");
     }
   };
 
