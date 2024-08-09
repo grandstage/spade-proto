@@ -1,0 +1,36 @@
+@use "@/styles/base.scss" as *;
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--Brand-Black, #393b41);
+  height: 78px;
+  border-bottom: 1px solid #ffffff;
+
+  @include media("<=tablet") {
+    display: none; 
+  }
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo-text {
+  font-family: "IBM Plex Sans";
+  font-style: normal;
+  font-weight: 700;
+  font-size: $font-3;
+  line-height: 22.5px;
+  color: $stage-white-new;
+  width: 87px;
+  height: 23px;
+}
+
+.profile-container {
+  display: flex;
+  align-items: center;
+}

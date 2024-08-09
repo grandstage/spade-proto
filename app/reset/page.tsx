@@ -2,7 +2,12 @@ import { redirect } from "next/navigation";
 import { sql } from "@vercel/postgres";
 import { compare } from "bcrypt";
 import ResetPasswordForm from "./form";
-import '../../styles/login.scss';
+import "../../styles/login.scss";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Reset Password | Spade AI",
+};
 
 const ResetPasswordPage = async ({
   searchParams,

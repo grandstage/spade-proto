@@ -1,0 +1,135 @@
+@use '@/styles/base.scss' as *;
+
+.navbar {
+  align-items: center;
+  background-color: $grey-700;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  justify-content: space-between;
+  padding: 32px 16px;
+  width: 106px;
+  margin-top: 78px;
+
+  @include media ("<=tablet") {
+    flex-direction: row;
+    width: 100vw;
+    height: auto;
+    padding: 16px 8px;
+    justify-content: space-around;
+    margin-top: 0px;
+  }
+}
+
+.iconContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.icon {
+  position: relative;
+  cursor: pointer;
+  stroke: inherit;
+  margin-bottom: 8px;
+
+  @include media ("<tablet") {
+    height: 25px;
+    width: 25px;
+  }
+}
+
+.menuItems {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+
+  @include media ("<=tablet") {
+    flex-direction: row;
+    gap: 24px;
+  }
+}
+
+.navItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+  padding: 8px;
+  border-radius: 8px;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
+  @include media ("<=tablet") {
+    flex-direction: row;
+    align-items: center;
+    padding: 4px 8px;
+  }
+}
+
+.navbar svg {
+  width: 100%;
+  height: 41px;
+  stroke: $stage-white;
+  stroke-width: 2;
+
+  @include media ("<=tablet") {
+    width: 24px;
+    height: 27px;
+  }
+}
+
+.active {
+  stroke: $light-blue !important;
+}
+
+.settingWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  width: 100%;
+  margin-top: auto;
+  margin-bottom: 82px;
+
+
+  @include media ("<=tablet") {
+    justify-content: flex-end;
+    margin-bottom: 0;
+  }
+}
+
+.nav-text {
+  margin-top: 8px;
+  font-family: "IBM Plex Sans";
+  font-style: normal;
+  font-size: $font-1;
+  line-height: 15.6px;
+  width: 100%;
+  height: 16px;
+  font-weight: 500;
+  color: var(--Brand-Grey, #D2D2D9);
+  text-align: center;
+
+  @include media ("<=tablet") {
+    margin-top: 0;
+    margin-left: 8px;
+    display: inline;
+  }
+}
+
+.activeNavText {
+  font-weight: 600;
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+.inactiveNavText {
+  font-weight: 500;
+  color: var(--Brand-Grey, #D2D2D9);
+}

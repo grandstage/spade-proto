@@ -1,7 +1,12 @@
 import { getServerSession } from "next-auth";
 import Form from "./form";
 import { redirect } from "next/navigation";
-import '../styles/login.scss';
+import "../styles/login.scss";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Login | Spade AI",
+};
 
 export default async function LoginPage() {
   const session = await getServerSession();
