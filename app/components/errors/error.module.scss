@@ -1,0 +1,22 @@
+.errorContainer {
+  background-color: #db5461;
+  border-radius: 3px;
+  text-align: center;
+  padding: 16px 0;
+  margin: 16px 0; // Add margin to ensure it does not overlap with other elements
+}
+
+.chatError {
+  z-index: 100;
+  margin-top: 10px;
+
+  @media (max-width: 768px) {
+    width: calc(100% - 66px);
+    margin: 10px auto; 
+  }
+
+  @media (min-width: 768px) and (max-width: 1221px) {
+    margin-left: 136px;
+    width: calc(100% - 170px);
+  }
+}
