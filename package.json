@@ -9,11 +9,14 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@svgr/webpack": "^8.1.0",
     "include-media": "^2.0.0",
     "next": "14.2.5",
     "react": "^18",
     "react-dom": "^18",
-    "sass": "^1.77.8"
+    "react-spinners": "^0.14.1",
+    "sass": "^1.77.8",
+    "showdown": "^2.1.0"
   },
   "devDependencies": {
     "@types/node": "^20",

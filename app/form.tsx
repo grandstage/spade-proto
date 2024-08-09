@@ -147,8 +147,8 @@ export default function LoginForm() {
           </StyledButton>
           <Grid container justifyContent="flex-end">
             <Grid item>
-              <Typography variant="body5" display="inline">
-                Don't have an account?
+              <Typography variant="body2" display="inline">
+                Don&apos;t have an account?
               </Typography>
               <Link href="/register">
                 <Button variant="text">Sign up</Button>

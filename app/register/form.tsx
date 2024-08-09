@@ -6,7 +6,6 @@ import {
   Alert,
   Container,
   Paper,
-  Avatar,
   Typography,
   Grid,
   Button,
@@ -27,7 +26,7 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
 
 const StyledLogo = styled("img")(({ theme }) => ({
   margin: theme.spacing(1),
-  width: "100px", // Set width and height as needed
+  width: "100px", 
   height: "100px",
 }));
 
@@ -58,7 +57,6 @@ export default function RegisterForm() {
       setError(data.message || "Registration failed");
     } else {
       setError(null);
-      // Handle successful registration (e.g., redirect to login)
     }
   };
 
@@ -131,7 +129,7 @@ export default function RegisterForm() {
           </StyledButton>
           <Grid container justifyContent="flex-end">
             <Grid item>
-              <Typography variant="body5" display="inline">
+              <Typography variant="body2" display="inline">
                 Already have an account?
               </Typography>
               <Link href="/">
