@@ -17,6 +17,18 @@ import { styled } from "@mui/system";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
+async function getCsrfToken() {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/csrf/`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const csrfToken = response.headers.get("X-CSRFToken") || "";
+  return csrfToken;
+}
+
 const StyledPaper = styled(Paper)(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
@@ -35,10 +47,8 @@ const StyledButton = styled(Button)(({ theme }) => ({
 
 const ResetPasswordForm = ({
   email,
-  token,
 }: {
   email: string;
-  token: string;
 }) => {
   const router = useRouter();
   const [password, setPassword] = useState("");
@@ -55,24 +65,40 @@ const ResetPasswordForm = ({
       return;
     }
 
-    const response = await fetch("/api/auth/reset", {
-      method: "POST",
-      body: JSON.stringify({ token, email, password }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    const data = await response.json();
+    try {
+      const csrfToken = await getCsrfToken(); // Get CSRF token if required
 
-    if (!response.ok) {
-      setError(data.message || "Failed to reset password");
-      setSuccess(null);
-    } else {
-      setError(null);
-      setSuccess("Your password has been successfully reset.");
-      setTimeout(() => {
-        router.push("/");
-      }, 3000); // 3-second delay
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/resetpassword/`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": csrfToken, // Include the CSRF token in the headers
+          },
+          body: JSON.stringify({
+            username: email,
+            new_password: password,
+            new_password_confirm: confirmPassword,
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setError(data.message || "Failed to reset password");
+        setSuccess(null);
+      } else {
+        setError(null);
+        setSuccess("Your password has been successfully reset.");
+        setTimeout(() => {
+          router.push("/");
+        }, 3000); // 3-second delay
+      }
+    } catch (error) {
+      console.error("Error in resetting password:", error);
+      setError("Failed to reset password due to a server error.");
     }
   };
 

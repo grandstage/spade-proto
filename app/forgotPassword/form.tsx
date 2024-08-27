@@ -13,6 +13,18 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/system";
 
+async function getCsrfToken() {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/csrf/`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const csrfToken = response.headers.get("X-CSRFToken") || "";
+  return csrfToken;
+}
+
 const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(2),
   display: "flex",
@@ -36,23 +48,56 @@ export default function ForgotPassword() {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const response = await fetch("/api/auth/forgotPassword", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email }),
-    });
-    const data = await response.json();
+    try {
+      const csrfToken = await getCsrfToken(); // Get CSRF token
 
-    if (!response.ok) {
-      setError(data.message || "Failed to send reset instructions");
-      setSuccess(null);
-    } else {
-      setError(null);
-      setSuccess(
-        "Instructions to reset your password have been sent to your email."
+      // First, check if the user exists and reset their password to empty strings
+      const checkResponse = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/resetpassword/`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": csrfToken, // Include the CSRF token in the headers
+          },
+          body: JSON.stringify({
+            username: email,
+            new_password: "password",
+            new_password_confirm: "password",
+          }),
+        }
       );
+
+      const checkData = await checkResponse.json();
+
+      if (!checkResponse.ok) {
+        setError(checkData.error || "No user found with that email address");
+        setSuccess(null);
+        return; // Stop further execution if the user does not exist
+      }
+      const response = await fetch("/api/auth/forgotPassword", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setError(data.message || "Failed to send reset instructions");
+        setSuccess(null);
+      } else {
+        setError(null);
+        setSuccess(
+          "Instructions to reset your password have been sent to your email."
+        );
+      }
+    } catch (error) {
+      console.error("Error during forgot password flow:", error);
+      setError("Failed to send reset instructions");
+      setSuccess(null);
     }
   };
 

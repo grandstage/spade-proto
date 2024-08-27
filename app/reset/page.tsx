@@ -16,31 +16,31 @@ const ResetPasswordPage = async ({
 }) => {
   const { token, email } = searchParams;
 
-  if (!token || !email) {
-    redirect("/");
-    return null;
-  }
+  // if (!token || !email) {
+  //   redirect("/");
+  //   return null;
+  // }
 
   // Check if user exists and validate the token
-  const userResponse = await sql`SELECT * FROM users WHERE email=${email}`;
-  const user = userResponse.rows[0];
+  // const userResponse = await sql`SELECT * FROM users WHERE email=${email}`;
+  // const user = userResponse.rows[0];
 
-  if (!user) {
-    redirect("/");
-    return null;
-  }
+  // if (!user) {
+  //   redirect("/");
+  //   return null;
+  // }
 
-  const isValidToken = await compare(token, user.reset_token);
-  const isTokenExpired = new Date(user.reset_token_expiry) < new Date();
+  // const isValidToken = await compare(token, user.reset_token);
+  // const isTokenExpired = new Date(user.reset_token_expiry) < new Date();
 
-  if (!isValidToken || isTokenExpired) {
-    redirect("/");
-    return null;
-  }
+  // if (!isValidToken || isTokenExpired) {
+  //   redirect("/");
+  //   return null;
+  // }
 
   return (
     <div className="flex items-center justify-center min-h-screen">
-      <ResetPasswordForm email={email} token={token} />
+      <ResetPasswordForm email={email} />
     </div>
   );
 };

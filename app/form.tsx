@@ -45,13 +45,13 @@ const StyledButton = styled(Button)({
 export default function LoginForm() {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
-  const [formData, setFormData] = useState({ email: "", password: "" });
+  const [formData, setFormData] = useState({ username: "", password: "" });
   const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const response = await signIn("credentials", {
-      email: formData.email,
+      username: formData.username,
       password: formData.password,
       redirect: false,
     });
@@ -93,13 +93,13 @@ export default function LoginForm() {
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
-                name="email"
+                name="username"
                 label="Email address"
-                type="email"
+                type="username"
                 variant="outlined"
                 fullWidth
                 required
-                value={formData.email}
+                value={formData.username}
                 onChange={handleChange}
               />
             </Grid>

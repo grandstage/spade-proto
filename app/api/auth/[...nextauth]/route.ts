@@ -1,7 +1,17 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { compare } from "bcrypt";
-import { sql } from "@vercel/postgres";
+
+async function getCsrfToken() {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/csrf/`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const csrfToken = response.headers.get("X-CSRFToken") || "";
+  return csrfToken;
+}
 
 const handler = NextAuth({
   session: {
@@ -13,37 +23,38 @@ const handler = NextAuth({
   providers: [
     CredentialsProvider({
       credentials: {
-        email: {},
-        password: {},
+        username: { },
+        password: { },
       },
-      async authorize(credentials, req) {
-        const response = await sql`
-            SELECT * FROM users WHERE email=${credentials?.email}`;
-        const user = response.rows[0];
+      async authorize(credentials) {
+        try {
+          const csrfToken = await getCsrfToken();
+          // Send POST request to Django backend for authentication
+          const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/login/`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-CSRFToken": csrfToken, 
+            },
+            body: JSON.stringify({
+              username: credentials?.username,
+              password: credentials?.password,
+            }),
+          });
 
-        if (!user) {
-          throw new Error("No user found with the email");
+          const user = await res.json();
+
+          // If no error and we have user data, return it
+          if (res.ok && user) {
+            return user; // Assuming `user` contains `{ id, email, etc. }`
+          }
+
+          // Return null if user data could not be retrieved
+          return null;
+        } catch (error) {
+          console.error("Error in authorization:", error);
+          return null;
         }
-
-        const passwordCorrect = await compare(
-          credentials?.password || "",
-          user.password
-        );
-
-        if (!passwordCorrect) {
-          throw new Error("Incorrect password");
-        }
-
-        console.log({ passwordCorrect });
-
-        if (passwordCorrect) {
-          return {
-            id: user.id,
-            email: user.email,
-          };
-        }
-
-        return null;
       },
     }),
   ],

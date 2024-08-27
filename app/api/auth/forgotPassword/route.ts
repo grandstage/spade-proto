@@ -17,28 +17,8 @@ export async function POST(request: Request) {
       );
     }
 
-    // Check if user exists
-    const userResponse = await sql`SELECT * FROM users WHERE email=${email}`;
-    const user = userResponse.rows[0];
-
-    if (!user) {
-      return NextResponse.json(
-        { message: "No user found with that email address" },
-        { status: 404 }
-      );
-    }
-
     // Generate a unique reset token
     const resetToken = crypto.randomBytes(32).toString("hex");
-    const hashedToken = await hash(resetToken, 10);
-    const tokenExpiry = new Date(Date.now() + 3600000).toISOString();
-
-    // Save the token and expiry to the database
-    await sql`
-        UPDATE users 
-        SET reset_token=${hashedToken}, reset_token_expiry=${tokenExpiry} 
-        WHERE email=${email}
-      `;
 
     // Send the reset email
     const resetUrl = `${
