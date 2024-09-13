@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { sql } from "@vercel/postgres";
 import sendgrid from "@sendgrid/mail";
 import crypto from "crypto";
-import { hash } from "bcrypt";
+import { any } from "bcrypt";
 
 sendgrid.setApiKey(process.env.SENDGRID_API_KEY || "");
 export async function POST(request: Request) {
