@@ -1,7 +1,7 @@
 //hooks/useRipple.tsx
 
 import React, { useEffect, useState } from "react";
-import { useDebounce } from "usehooks-ts";
+import { useDebounceValue } from "usehooks-ts";
 
 /**
  * This hook accepts a ref to any element and adds a click event handler that creates ripples when click
@@ -47,7 +47,7 @@ const useRipple = <T extends HTMLElement>(ref: React.RefObject<T>) => {
   }, [ref, ripples]);
 
   //add a debounce so that if the user doesn't click after 1s, we remove the ripples
-  const _debounced = useDebounce(ripples, 3000);
+  const _debounced = useDebounceValue(ripples, 3000);
   useEffect(() => {
     if (_debounced.length) {
       setRipples([]);

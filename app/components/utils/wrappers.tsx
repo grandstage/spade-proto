@@ -1,4 +1,4 @@
-import { GET as apiUserAuth } from "../../api/user/auth/route";
+import { GET as apiUserAuth } from "../../api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
 
 export default function withOnboardingRequired(
