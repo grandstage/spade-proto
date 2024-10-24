@@ -33,7 +33,7 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "build/types/**/*.ts"
-  ],
+, "app/components/utils/airtableApi.tsx"  ],
   "exclude": [
     "node_modules"
   ]
